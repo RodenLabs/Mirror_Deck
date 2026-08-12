@@ -1,0 +1,8 @@
+# Build artifacts (se regeneran con construir_todo.bat)
+build/
+dist/
+__pycache__/
+*.pyc
+
+# Salida del instalador
+*.exe
