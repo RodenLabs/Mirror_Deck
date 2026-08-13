@@ -1,5 +1,5 @@
 #define AppName "MirrorDeck"
-#define AppVersion "4.2.6"
+#define AppVersion "4.2.7"
 #define AppExeName "MirrorDeck.exe"
 
 [Setup]
@@ -38,8 +38,13 @@ Name: "desktopicon"; Description: "Crear acceso directo en el Escritorio"
 Name: "startmenu";   Description: "Agregar al Menu Inicio"
 
 [Files]
-Source: "dist\MirrorDeck.exe";           DestDir: "{app}"; Flags: ignoreversion
-Source: "dist\InstalarDependencias.exe"; DestDir: "{app}"; Flags: ignoreversion
+; --onedir: PyInstaller genera una carpeta completa (exe + sus DLLs/datos
+; ya extraidos) en vez de un unico .exe autoextraible. Se copia todo el
+; contenido de ambas carpetas a la misma carpeta de instalacion; los
+; nombres de los .exe finales (MirrorDeck.exe / InstalarDependencias.exe)
+; no cambian, asi que el resto del instalador no necesita tocarse.
+Source: "dist\MirrorDeck\*";           DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "dist\InstalarDependencias\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Opcional: si existe tap_mapper.apk junto a este script, se incluye en el
 ; instalador y MirrorDeck puede instalarlo en el celular con un boton.
 ; Si no existe, ISCC compila igual (skipifsourcedoesntexist) y ese boton

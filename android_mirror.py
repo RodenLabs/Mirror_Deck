@@ -99,7 +99,7 @@ FFMPEG_URL = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
 
 FEEDBACK_EMAIL = "rodenlabsapps@gmail.com"
 
-APP_VERSION        = "4.2.6"
+APP_VERSION        = "4.2.7"
 TRIAL_DAYS         = 7
 LICENSE_OFFLINE_GRACE_DAYS = 5   # dias que sigue andando sin poder validar online
 

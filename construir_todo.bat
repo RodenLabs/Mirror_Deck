@@ -34,7 +34,15 @@ REM sospechosos los .exe comprimidos con UPX con muchisima frecuencia,
 REM porque el malware tambien usa UPX para esconder su contenido del
 REM analisis estatico. Sin UPX el .exe pesa un poco mas, pero baja
 REM mucho el riesgo de falso positivo "Malware.AI.xxxxx".
-pyinstaller --onefile --windowed --noupx --name "MirrorDeck" ^
+REM --onedir (en vez de --onefile): un .exe de un solo archivo se
+REM auto-extrae a una carpeta temporal CADA VEZ que arranca; si un
+REM antivirus interfiere justo en ese instante (muy probable en un
+REM build recien compilado, que todavia no esta "conocido" por el AV),
+REM la extraccion queda a medias y la app explota con "Failed to load
+REM Python DLL". Con --onedir los archivos ya estan extraidos de
+REM antemano en la carpeta de instalacion, sin extraccion en cada
+REM inicio, lo que elimina esa ventana de riesgo por completo.
+pyinstaller --onedir --windowed --noupx --name "MirrorDeck" ^
   --icon "icon.ico" ^
   --add-data "icon.ico;." ^
   --add-data "icon_40.png;." ^
@@ -51,7 +59,7 @@ if exist icon.ico (
 )
 
 echo [..] Compilando InstalarDependencias.exe...
-pyinstaller --onefile --windowed --noupx --name "InstalarDependencias" ^
+pyinstaller --onedir --windowed --noupx --name "InstalarDependencias" ^
   --icon "icon.ico" ^
   --manifest "install_gui.manifest" ^
   install_gui.py --clean -y >nul 2>&1
