@@ -108,7 +108,7 @@ LICENSE_OFFLINE_GRACE_DAYS = 5   # dias que sigue andando sin poder validar onli
 # compiles una version nueva, subila ahi como "Release" con un tag
 # vX.Y.Z (ej. v4.1.0) y el .exe del instalador como archivo adjunto —
 # la app compara sola su version contra la ultima publicada.
-GITHUB_OWNER = "roden-labs"
+GITHUB_OWNER = "RodenLabs"
 GITHUB_REPO  = "Mirror_Deck"
 GITHUB_API_LATEST = f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/latest"
 
