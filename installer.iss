@@ -1,5 +1,5 @@
 #define AppName "MirrorDeck"
-#define AppVersion "4.2.5"
+#define AppVersion "4.2.6"
 #define AppExeName "MirrorDeck.exe"
 
 [Setup]

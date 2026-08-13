@@ -27,6 +27,16 @@ def run_cmd(cmd,timeout=180):
     except subprocess.TimeoutExpired: return -2,"","Tiempo agotado"
     except Exception as e: return -3,"",str(e)
 
+def kill_stale_processes():
+    """adb.exe corre su propio servidor en segundo plano y sigue vivo
+    incluso despues de cerrar MirrorDeck; scrcpy.exe tambien puede quedar
+    huerfano si habia un espejo activo. Ambos bloquean sus propios .exe/.dll
+    mientras estan corriendo, lo que hace fallar la extraccion/sobreescritura
+    del zip portable (o del paquete de winget) con Permission denied. Los
+    matamos antes de instalar/actualizar para liberar esos archivos."""
+    for exe in ("adb.exe", "scrcpy.exe"):
+        run_cmd(f"taskkill /F /IM {exe}", timeout=10)
+
 def check_winget(): rc,out,_=run_cmd("winget --version"); return rc==0,out.strip()
 def check_adb(): rc,out,_=run_cmd("adb version"); return rc==0,out.split("\n")[0] if out else ""
 def check_scrcpy(): rc,out,_=run_cmd("scrcpy --version"); return rc==0,out.split("\n")[0] if out else ""
@@ -170,6 +180,11 @@ class InstallerApp:
             self._step("herramientas","skip",f"Ya estan instalados.\nADB: {ver_adb}\nscrcpy: {ver_sc}")
             self._log(f"  ADB: {ver_adb}",GREEN); self._log(f"  scrcpy: {ver_sc}",GREEN)
             self._finish(True); return
+
+        # Liberar archivos bloqueados por procesos previos antes de instalar
+        # o actualizar (ver kill_stale_processes). Silencioso si no habia nada.
+        self._log("  Cerrando procesos previos de adb/scrcpy si quedaron activos...")
+        kill_stale_processes()
 
         # Metodo principal: descargar el zip portable oficial de scrcpy.
         # Trae adb.exe adentro, asi que resuelve ambos con una sola descarga
